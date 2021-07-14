@@ -4,6 +4,7 @@ const valid2 = [5, 5, 3, 5, 7, 6, 6, 7, 6, 8, 7, 5, 1, 4, 3, 9]
 const valid3 = [3, 7, 1, 6, 1, 2, 0, 1, 9, 9, 8, 5, 2, 3, 6]
 const valid4 = [6, 0, 1, 1, 1, 4, 4, 3, 4, 0, 6, 8, 2, 9, 0, 5]
 const valid5 = [4, 5, 3, 9, 4, 0, 4, 9, 6, 7, 8, 6, 9, 6, 6, 6]
+const valid6 = [4, 5, 3, 9, 6, 8, 9, 8, 8, 7, 7, 0, 5, 7, 9, 8]
 
 // All invalid credit card numbers
 const invalid1 = [4, 5, 3, 2, 7, 7, 8, 7, 7, 1, 0, 9, 1, 7, 9, 5]
@@ -23,45 +24,63 @@ const mystery5 = [4, 9, 1, 3, 5, 4, 0, 4, 6, 3, 0, 7, 2, 5, 2, 3]
 const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, invalid3, invalid4, invalid5, mystery1, mystery2, mystery3, mystery4, mystery5]
 
 
-// Add your functions below:
+// LUHN'S ALGORITHM -------------------
 
-const validateCred = arr => {
-    let sum = 0;
+// Multiply every other digit by two starting from the 2nd digit from the right.
+const multiplyByTwo = card => {
+    let arr = [];
     let digit = 0; // To keep the digits from mutating
 
-    if ((arr.length%2)===0){
-        for (i=arr.length-1;i>=0;i--){
-            sum += arr[i];
-            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]}`); console.log(`Running total: ${sum}\n`)
+    if ((card.length%2)===0){
+        for (i=card.length-1;i>=0;i--){
+            arr.unshift(card[i]);
     
             i--;
-            digit = arr[i]*2;
-            if (digit > 9){digit -= 9};
-            sum += digit;
-            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]} → ${arr[i]*2} → ${digit}`); console.log(`Running total: ${sum}\n`)
+            digit = card[i]*2;
+            arr.unshift(digit);
         }
     } else {
-        for (i=arr.length-1;i>1;i--){
-            sum += arr[i];
-            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]}`); console.log(`Running total: ${sum}\n`)
+        for (i=card.length-1;i>1;i--){
+            arr.unshift(card[i]);
     
             i--;
-            digit = arr[i]*2;
-            if (digit > 9){digit -= 9};
-            sum += digit;
-            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]} → ${arr[i]*2} → ${digit}`); console.log(`Running total: ${sum}\n`)
+            digit = card[i]*2;
+            arr.unshift(digit);
         }
-        sum += arr[0];
+        arr.unshift(card[0]);
     }
-
-
-    return (sum%10)===0 ? true : false
-    
+    return arr;
 }
 
-const findInvalidCards = nestArr => {
+// If a digit is greater than 9 after doubling, subtract 9.
+const luhnArr = card => {
+    let arr = multiplyByTwo(card);
+
+    for (i=0;i<arr.length;i++){
+        if(arr[i]>9){
+            arr[i] -= 9;
+        }
+    }
+    return arr;
+}
+
+// Find luhnArr % 10
+const moduloOfLuhnArr = card => {
+    let sum = luhnArr(card).reduce((x,y) => x+=y);
+    return sum % 10;
+}
+
+// Validate credit card
+const validateCred = card => {
+    const sum = moduloOfLuhnArr(card)
+    return (sum%10)===0 ? true : false
+}
+
+// END OF LUHN'S ALGORITHM ------------
+
+const findInvalidCards = cardSet => {
     const invalidCards = [];
-    nestArr.forEach(card => {if(!validateCred(card)){invalidCards.push(card)}});
+    cardSet.forEach(card => {if(!validateCred(card)){invalidCards.push(card)}});
     return invalidCards;
 }
 
@@ -100,7 +119,10 @@ const idInvalidCardCompanies = invalidCards => {
     return issuingCompanies;
 }
 
+// Test required functions
+///*
 console.log(`valid1 is a valid card: ${validateCred(valid1)}`);
 console.log(`invalid1 is an valid card: ${validateCred(invalid1)}\n`);
 console.log(findInvalidCards(batch)); console.log();
 console.log(idInvalidCardCompanies(findInvalidCards(batch)));
+//*/
