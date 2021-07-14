@@ -25,10 +25,82 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
 
 // Add your functions below:
 
+const validateCred = arr => {
+    let sum = 0;
+    let digit = 0; // To keep the digits from mutating
+
+    if ((arr.length%2)===0){
+        for (i=arr.length-1;i>=0;i--){
+            sum += arr[i];
+            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]}`); console.log(`Running total: ${sum}\n`)
+    
+            i--;
+            digit = arr[i]*2;
+            if (digit > 9){digit -= 9};
+            sum += digit;
+            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]} → ${arr[i]*2} → ${digit}`); console.log(`Running total: ${sum}\n`)
+        }
+    } else {
+        for (i=arr.length-1;i>1;i--){
+            sum += arr[i];
+            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]}`); console.log(`Running total: ${sum}\n`)
+    
+            i--;
+            digit = arr[i]*2;
+            if (digit > 9){digit -= 9};
+            sum += digit;
+            //console.log(`Iteration ${i}`); console.log(`Digit: ${arr[i]} → ${arr[i]*2} → ${digit}`); console.log(`Running total: ${sum}\n`)
+        }
+        sum += arr[0];
+    }
 
 
+    return (sum%10)===0 ? true : false
+    
+}
 
+const findInvalidCards = nestArr => {
+    const invalidCards = [];
+    nestArr.forEach(card => {if(!validateCred(card)){invalidCards.push(card)}});
+    return invalidCards;
+}
 
+const idInvalidCardCompanies = invalidCards => {
+    const issuingCompanies = [];
 
+    // Get first digits of the card
+    const firstDigits = [];
+    invalidCards.forEach(card => firstDigits.push(card[0]));
 
+    // Get unique first digits
+    const uniqueFirstDigits = firstDigits.filter((item,pos)=>{return firstDigits.indexOf(item) === pos;});
 
+    // List issuing companies
+    uniqueFirstDigits.sort().forEach(digit => {
+        switch (digit){
+            case 3:
+                issuingCompanies.push('Amex');
+                break;
+            case 4:
+                issuingCompanies.push('Visa');
+                break;
+            case 5:
+                issuingCompanies.push('Mastercard');
+                break;
+            case 6:
+                issuingCompanies.push('Discover');
+                break;
+            default:
+                console.log(`Company not found`);
+                break;
+        }
+    })
+
+    // console.log(firstDigits); console.log(uniqueFirstDigits.sort());
+    return issuingCompanies;
+}
+
+console.log(`valid1 is a valid card: ${validateCred(valid1)}`);
+console.log(`invalid1 is an valid card: ${validateCred(invalid1)}\n`);
+console.log(findInvalidCards(batch)); console.log();
+console.log(idInvalidCardCompanies(findInvalidCards(batch)));
