@@ -33,7 +33,7 @@ const multiplyByTwo = card => {
     let digit = 0; // To keep the digits from mutating
 
     if ((card.length%2)===0){
-        for (i=card.length-1;i>=0;i--){
+        for (let i=card.length-1;i>=0;i--){
             arr.unshift(card[i]);
     
             i--;
@@ -41,7 +41,7 @@ const multiplyByTwo = card => {
             arr.unshift(digit);
         }
     } else {
-        for (i=card.length-1;i>1;i--){
+        for (let i=card.length-1;i>1;i--){
             arr.unshift(card[i]);
     
             i--;
@@ -57,7 +57,7 @@ const multiplyByTwo = card => {
 const luhnArr = card => {
     let arr = multiplyByTwo(card);
 
-    for (i=0;i<arr.length;i++){
+    for (let i=0;i<arr.length;i++){
         if(arr[i]>9){
             arr[i] -= 9;
         }
@@ -120,14 +120,6 @@ const idInvalidCardCompanies = invalidCards => {
     return issuingCompanies;
 }
 
-// Test required functions
-/*
-console.log(`valid1 is a valid card: ${validateCred(valid1)}`);
-console.log(`invalid1 is an valid card: ${validateCred(invalid1)}\n`);
-console.log(findInvalidCards(batch)); console.log();
-console.log(idInvalidCardCompanies(findInvalidCards(batch)));
-//*/
-
 // Accept string for validation
 
 // Convert invalid numbers to valid numbers
@@ -141,9 +133,7 @@ const checkFirstDigit = cardToCheck => {
     }
 
     // In case we will have 3 cards.
-    const cardSet = [card,card,card]
-    console.log(cardSet)
-    console.log()
+    const cardSet = [card.slice(0),card.slice(0),card.slice(0)]
 
     if (card.length===15){
         // Make sure Amex card starts with 3.
@@ -156,19 +146,16 @@ const checkFirstDigit = cardToCheck => {
         } else {
 
             // Change to a Visa card
-            cardSet[0][0] = '4';
+            cardSet[0][0] = 4;
             
             // Change to a Mastercard
-            cardSet[1][0] = '5';
+            cardSet[1][0] = 5;
             
             // Change to a Discover card
-            cardSet[2][0] = '6';
+            cardSet[2][0] = 6;
             //*/
         }
     }
-    
-    console.log(cardSet);
-    console.log('End of function\n')
     return cardSet
 }
 
@@ -194,8 +181,9 @@ const convertInvalidToValid = arr => {
     }
     
     if (cardSet.length === 3){
-        for(i=0;i<cardSet.length;i++){
+        for(let i=0;i<cardSet.length;i++){
             cardSet[i] = primeConvert(cardSet[i])
+            console.log(`Conversion #${i} successful`)
         }
     } else {
         cardSet = primeConvert(cardSet)
@@ -211,8 +199,8 @@ console.log()
 //console.log('Invalid card:')
 //console.log(invalid1)
 //console.log()
-const testNewCard = convertInvalidToValid(invalid6);
+const testNewCard = convertInvalidToValid(invalid6)[2];
 console.log(testNewCard)
 console.log()
-//console.log(`Valid? ${validateCred(testNewCard)}`)
+console.log(`Valid? ${validateCred(testNewCard)}`)
 //*/
