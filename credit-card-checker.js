@@ -73,8 +73,16 @@ const moduloOfLuhnArr = card => {
 
 // Validate credit card
 const validateCred = card => {
-    const sum = moduloOfLuhnArr(card)
-    return (sum%10)===0 ? true : false
+    const setResult = [];
+
+    if(card.length===3){
+        for(let i=0;i<card.length;i++){
+            setResult.push((moduloOfLuhnArr(card[i])%10)===0 ? true : false)
+        }
+    } else {
+        return (moduloOfLuhnArr(card)%10)===0 ? true : false;
+    }
+    return setResult;
 }
 
 // END OF LUHN'S ALGORITHM ------------
@@ -181,9 +189,9 @@ const convertInvalidToValid = arr => {
     }
     
     if (cardSet.length === 3){
+        console.log()
         for(let i=0;i<cardSet.length;i++){
             cardSet[i] = primeConvert(cardSet[i])
-            console.log(`Conversion #${i} successful`)
         }
     } else {
         cardSet = primeConvert(cardSet)
@@ -192,15 +200,26 @@ const convertInvalidToValid = arr => {
 }
 
 
+const testConversion = card => {
+    const testCard = card;
+    console.log(`Invalid card: ${testCard.join('')}`);
+    const testNewCard = convertInvalidToValid(testCard);
 
-console.log()
+    if(testNewCard.length===3){
+        let validCards = '';
+        for(let i=0; i<2; i++){validCards += `${testNewCard[i].join('')}, `}
+        validCards += `${testNewCard[2].join('')}`
+        console.log(`Converted cards: ${validCards}`)
+        console.log(`These are ${validateCred(testNewCard)[0]===true && validateCred(testNewCard)[1]===true && validateCred(testNewCard)[2]===true ? `now valid cards.`:`still invalid cards.`}\n------------`)
+    } else {
+        console.log(`Converted card: ${testNewCard.join('')}`);
+        console.log(`This is ${validateCred(testNewCard)===true ? `now a valid card.`:`still an invalid card.`}\n------------`)
+    }
+}
 
-
-//console.log('Invalid card:')
-//console.log(invalid1)
-//console.log()
-const testNewCard = convertInvalidToValid(invalid6)[2];
-console.log(testNewCard)
-console.log()
-console.log(`Valid? ${validateCred(testNewCard)}`)
-//*/
+testConversion(invalid1);
+testConversion(invalid2);
+testConversion(invalid3);
+testConversion(invalid4);
+testConversion(invalid5);
+testConversion(invalid6);
