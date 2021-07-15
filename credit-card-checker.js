@@ -12,6 +12,7 @@ const invalid2 = [5, 7, 9, 5, 5, 9, 3, 3, 9, 2, 1, 3, 4, 6, 4, 3]
 const invalid3 = [3, 7, 5, 7, 9, 6, 0, 8, 4, 4, 5, 9, 9, 1, 4]
 const invalid4 = [6, 0, 1, 1, 1, 2, 7, 9, 6, 1, 7, 7, 7, 9, 3, 5]
 const invalid5 = [5, 3, 8, 2, 0, 1, 9, 7, 7, 2, 8, 8, 3, 8, 5, 4]
+const invalid6 = [2, 7, 9, 5, 5, 9, 3, 3, 9, 2, 1, 3, 4, 6, 4, 3]
 
 // Can be either valid or invalid
 const mystery1 = [3, 4, 4, 8, 0, 1, 9, 6, 8, 3, 0, 5, 4, 1, 4]
@@ -120,9 +121,98 @@ const idInvalidCardCompanies = invalidCards => {
 }
 
 // Test required functions
-///*
+/*
 console.log(`valid1 is a valid card: ${validateCred(valid1)}`);
 console.log(`invalid1 is an valid card: ${validateCred(invalid1)}\n`);
 console.log(findInvalidCards(batch)); console.log();
 console.log(idInvalidCardCompanies(findInvalidCards(batch)));
+//*/
+
+// Accept string for validation
+
+// Convert invalid numbers to valid numbers
+
+const numOfDigits = card => card.length === 15 || card.length === 16 ? card : `Please input a 15-digit or 16-digit credit card number`;
+
+const checkFirstDigit = cardToCheck => {
+    const card = numOfDigits(cardToCheck);
+    if (typeof card === 'string'){
+        return `Please input a 15-digit or 16-digit credit card number`;
+    }
+
+    // In case we will have 3 cards.
+    const cardSet = [card,card,card]
+    console.log(cardSet)
+    console.log()
+
+    if (card.length===15){
+        // Make sure Amex card starts with 3.
+        card[0] = 3;
+        return card
+    } else {
+        // Check if card belongs to Visa, Mastercard, or Discover; else, create one of each
+        if (card[0]===4 || card[0]===5 || card[0]===6){
+            return card
+        } else {
+
+            // Change to a Visa card
+            cardSet[0][0] = '4';
+            
+            // Change to a Mastercard
+            cardSet[1][0] = '5';
+            
+            // Change to a Discover card
+            cardSet[2][0] = '6';
+            //*/
+        }
+    }
+    
+    console.log(cardSet);
+    console.log('End of function\n')
+    return cardSet
+}
+
+const primeConvert = card => {
+    // Value that will determine how to adjust and how much
+    let modulo = moduloOfLuhnArr(card);
+    //console.log(`Modulo: ${modulo}`); console.log(`Valid:`)
+
+    // Mutate card
+    if (card[card.length-1]>=modulo){
+        card[card.length-1] -= modulo;
+    } else {
+        card[card.length-1] += (10-modulo)
+    }
+
+    return card;
+}
+
+const convertInvalidToValid = arr => {
+    let cardSet = checkFirstDigit(arr)
+    if (typeof card === 'string'){
+        return `Please input a 15-digit or 16-digit credit card number`;
+    }
+    
+    if (cardSet.length === 3){
+        for(i=0;i<cardSet.length;i++){
+            cardSet[i] = primeConvert(cardSet[i])
+        }
+    } else {
+        cardSet = primeConvert(cardSet)
+    }
+    return cardSet
+}
+
+
+
+console.log()
+
+
+//console.log('Invalid card:')
+//console.log(invalid1)
+//console.log()
+const testNewCard = convertInvalidToValid(invalid6);
+console.log(testNewCard)
+console.log()
+//console.log(`Valid? ${validateCred(testNewCard)}`)
 //*/
