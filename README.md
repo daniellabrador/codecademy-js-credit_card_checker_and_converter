@@ -6,6 +6,7 @@ This program checks if a credit card number is valid or not, as well as convert 
 
 - [Project Prompt](#project-prompt)
 - [Technologies](#technologies)
+- [Setup](#setup)
 - [Sources](#sources)
 
 ## Project Prompt
@@ -15,6 +16,16 @@ The company that you work for suspects that credit card distributors have been m
 ## Technologies
 
 - JavaScript ES6
+
+## Setup
+
+To run this program, you need to have [Node.js](https://nodejs.org/en/download/) or any other ways to see output of [main.js](main.js) to the console.
+
+- To check if a credit card number is valid, use the validateCred() function and enter a string, a number or an array of numbers as its argument.
+- To get an array of invalid card numbers among an array of random card numbers, use the findInvalidCards() function and enter an array of cards as its argument.
+- To identify the credit card companies that supposedly issued the cards, use the idInvalidCardCompanies() function and enter an array of invalid cards as its argument.
+- To convert invalid credit card numbers, use the testConversion() function and enter a string, a number or an array of numbers as its argument.
+
 
 ## Sources
 
