@@ -192,7 +192,6 @@ const batch = [valid1, valid2, valid3, valid4, valid5, invalid1, invalid2, inval
         }
         
         if (cardSet.length === 3){
-            console.log()
             for(let i=0;i<cardSet.length;i++){
                 cardSet[i] = primeConvert(cardSet[i])
             }
